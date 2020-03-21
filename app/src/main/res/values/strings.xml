@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Boulangerie</string>
+    <string-array name="pdtNames">
+        <item>Produit1</item>
+        <item>Produit2</item>
+        <item>Produit3</item>
+        <item>Produit4</item>
+    </string-array>
+    <string-array name="pdtCodes">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+</resources>
