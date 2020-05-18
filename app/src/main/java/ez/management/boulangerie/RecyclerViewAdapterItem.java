@@ -20,14 +20,12 @@ public class RecyclerViewAdapterItem extends RecyclerView.Adapter<RecyclerViewAd
     private ArrayList<String> mPdtNames = new ArrayList<>();
     private ArrayList<String> mPdtCodes = new ArrayList<>();
     private ArrayList<Integer> mQtes = new ArrayList<>();
-    private Context mContext;
 
-    public RecyclerViewAdapterItem(Context mContext, ArrayList<String> mPdtNames,
+    public RecyclerViewAdapterItem(ArrayList<String> mPdtNames,
                                    ArrayList<String> mPdtCodes, ArrayList<Integer> mQtes) {
         this.mPdtNames = mPdtNames;
         this.mPdtCodes = mPdtCodes;
         this.mQtes = mQtes;
-        this.mContext = mContext;
     }
 
     @NonNull
@@ -35,8 +33,8 @@ public class RecyclerViewAdapterItem extends RecyclerView.Adapter<RecyclerViewAd
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_listitem,parent,
                 false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+
+        return new ViewHolder(view);
     }
 
     @Override
@@ -46,15 +44,8 @@ public class RecyclerViewAdapterItem extends RecyclerView.Adapter<RecyclerViewAd
         if(mPdtCodes.size() != 0) {
             holder.nom.setText(mPdtNames.get(position));
             holder.code.setText(mPdtCodes.get(position));
-            holder.qte.setText(mQtes.get(position).toString());
-            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onClick: clicked on: " + mPdtNames.get(position));
-                    //gonna change this for notifier to delete clicked item
-                    Toast.makeText(mContext, "hola", Toast.LENGTH_SHORT).show();
-                }
-            });
+            holder.qte.setText(String.valueOf(mQtes.get(position)));
+
         }
     }
 

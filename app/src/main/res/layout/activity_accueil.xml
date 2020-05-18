@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
+    android:isScrollContainer="true"
+    android:scrollbars="horizontal|vertical"
     tools:context=".Accueil">
 
     <Button
         android:id="@+id/nouvelleBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="72dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="20dp"
         android:text="Passer une nouvelle commande"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.966"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +24,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="40dp"
         android:text="Commandes en cours:"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -35,16 +35,18 @@
         android:id="@+id/enCoursBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
         android:text="En Cours"
-        app:layout_constraintEnd_toEndOf="@+id/nouvelleBtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintBaseline_toBaselineOf="@id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textView3" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="60dp"
         android:text="Mes Commandes:"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -56,14 +58,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Historique"
-        app:layout_constraintEnd_toEndOf="@+id/enCoursBtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintBaseline_toBaselineOf="@id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/enCoursBtn"
+        app:layout_constraintTop_toBottomOf="@id/enCoursBtn" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="40dp"
         android:text="Commandes honorées:"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -74,12 +77,10 @@
         android:id="@+id/disconnectBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:text="déconnecter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.948"
-        app:layout_constraintStart_toStartOf="@+id/nouvelleBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
