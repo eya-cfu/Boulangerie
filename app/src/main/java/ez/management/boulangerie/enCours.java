@@ -59,26 +59,30 @@ public class enCours extends AppCompatActivity implements RecylerViewAdapterCmd.
         if(getIntent().hasExtra("idBL")){
             idBL = getIntent().getExtras().getInt("idBL");
 
-            commandesBLController.getCmdsByEtatAndBoulangerieID(CommandesBL.EtatEnum.enCours.toString(), idBL,
+            commandesBLController.getCmdsByEtatAndBoulangerieID(CommandesBL.EtatEnum.nouvelle.toString(), idBL,
                     new Response.Listener<List<CommandesBL>>() {
                         @Override
                         public void onResponse(List<CommandesBL> response) {
+                            Log.d("idBoul ", String.valueOf(idBL));
                             if(response.size() != 0){
+                                rienTxt.setText("");
+
                                 for (CommandesBL cmd : response){
                                     mCmdCodes.add(cmd.getIdCommandeBL());
                                     mCmdDates.add(ApiInvoker.formatDate(cmd.getDueDate()));
-                                    Log.d("cmd",cmd.toString());
-                                }
-
-                                if(mCmdCodes.size() == 0){
-                                    rienTxt.setText("Vous n'avez aucune commande en cours.");
-                                }else {
-                                    rienTxt.setText("");
+                                   // Log.d("cmd",cmd.toString());
                                 }
                             }
-                            progressBar.setVisibility(View.GONE);
+
                             adapter.notifyDataSetChanged();
-                            Log.d("response",String.valueOf(response.size()));
+
+                            if (mCmdCodes.size()==0) {
+                                rienTxt.setText("Vous n'avez aucune commande en cours.");
+                            }else{
+                                rienTxt.setText("");
+                            }
+                           // progressBar.setVisibility(View.GONE);
+                           // Log.d("response",String.valueOf(response.size()));
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -86,9 +90,43 @@ public class enCours extends AppCompatActivity implements RecylerViewAdapterCmd.
                             progressBar.setVisibility(View.GONE);
                             rienTxt.setTextColor(Color.RED);
                             rienTxt.setText(VolleyErrorHelper.getMessage(error));
-                            Log.d("error",error.getMessage());
+                           // Log.d("error",""+error.getMessage());
                         }
                     });
+            commandesBLController.getCmdsByEtatAndBoulangerieID(CommandesBL.EtatEnum.enCours.toString(), idBL,
+                    new Response.Listener<List<CommandesBL>>() {
+                        @Override
+                        public void onResponse(List<CommandesBL> response) {
+                            if(response.size() != 0){
+                                rienTxt.setText("");
+
+                                for (CommandesBL cmd : response){
+                                    mCmdCodes.add(cmd.getIdCommandeBL());
+                                    mCmdDates.add(ApiInvoker.formatDate(cmd.getDueDate()));
+                                    // Log.d("cmd",cmd.toString());
+                                }
+
+                            }
+                            adapter.notifyDataSetChanged();
+                            if (mCmdCodes.size()==0) {
+                                rienTxt.setText("Vous n'avez aucune commande en cours.");
+                            }else{
+                                rienTxt.setText("");
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            // Log.d("response",String.valueOf(response.size()));
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressBar.setVisibility(View.GONE);
+                            rienTxt.setTextColor(Color.RED);
+                            rienTxt.setText(VolleyErrorHelper.getMessage(error));
+                           // Log.d("error",""+error.getMessage());
+                        }
+                    });
+
+
 
         }
 
@@ -97,8 +135,10 @@ public class enCours extends AppCompatActivity implements RecylerViewAdapterCmd.
     @Override
     public void onCmdClick(final int position) {
         rienTxt.setText("");
+
+
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        AlertDialog alertDialog ;
+
         alertDialogBuilder.setTitle("Confirmer la reception");
         alertDialogBuilder.setMessage("Confirmer la reception de la commande "+mCmdCodes.get(position)+"?");
         alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -131,8 +171,24 @@ public class enCours extends AppCompatActivity implements RecylerViewAdapterCmd.
                 dialog.cancel();
             }
         });
-        alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+
+        commandesBLController.getCommandeBLById(mCmdCodes.get(position), new Response.Listener<CommandesBL>() {
+            @Override
+            public void onResponse(CommandesBL response) {
+                if(response.getEtat().toString().equalsIgnoreCase("enCours")){
+                    alertDialog.show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                rienTxt.setTextColor(Color.RED);
+                rienTxt.setText(VolleyErrorHelper.getMessage(error));
+            }
+        });
+
+        
 
     }
 }

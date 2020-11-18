@@ -27,9 +27,11 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.bakerieslibrary.models.CommandesBL;
+import com.example.bakerieslibrary.models.DetailsCommandeBL;
 import com.example.bakerieslibrary.models.Produits;
 import com.example.bakerieslibrary.models.customresponses.Count;
 import com.example.bakerieslibrary.tags.CommandesBLController;
+import com.example.bakerieslibrary.tags.DetailsCommandeBLController;
 import com.example.bakerieslibrary.tags.ProduitsController;
 import com.example.bakerieslibrary.utils.VolleyErrorHelper;
 
@@ -64,6 +66,8 @@ public class Commande extends AppCompatActivity implements DatePickerDialog.OnDa
     Intent i1;
     CommandesBLController cmdController ;
     ProduitsController produitsController ;
+    DetailsCommandeBLController detailsCommandeBLController;
+    DetailsCommandeBL detailsCommandeBL = new DetailsCommandeBL();
 
     private ArrayList<String> pdtNames = new ArrayList<>();
     private ArrayList<String> pdtCodes = new ArrayList<>();
@@ -80,6 +84,7 @@ public class Commande extends AppCompatActivity implements DatePickerDialog.OnDa
 
         cmdController = new CommandesBLController(getApplicationContext());
         produitsController = new ProduitsController(getApplicationContext());
+        detailsCommandeBLController = new DetailsCommandeBLController(getApplicationContext());
         i1 = new Intent(getApplicationContext(),Accueil.class);
 
         mContext = this;
@@ -115,12 +120,14 @@ public class Commande extends AppCompatActivity implements DatePickerDialog.OnDa
                 if(response.getCount()!=null){
                     numeroCommande = response.getCount() +1;
                 }
-                //Log.d("Count", response.toString());
+               // Log.d("Count !!!!!!!!!!!!!!!!!", response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 errorTxt.setText(VolleyErrorHelper.getMessage(error));
+               // Log.d("Count !!!!!!!!!!!!!!!!!", error.getMessage());
+
             }
         });
 
@@ -180,7 +187,7 @@ public class Commande extends AppCompatActivity implements DatePickerDialog.OnDa
                  String idCommande = numeroCommande+"BL"+idBoulangerie + "-" + sdf.format(creationDate);
 
                  final CommandesBL cmd = new CommandesBL(idCommande,dueDate,creationDate,
-                         CommandesBL.EtatEnum.nouvelle, idBoulangerie,null);
+                         CommandesBL.EtatEnum.nouvelle, idBoulangerie,0);
 
                  cmdController.addCommandeBL(cmd, new Response.Listener<String>() {
                      @Override
@@ -189,10 +196,33 @@ public class Commande extends AppCompatActivity implements DatePickerDialog.OnDa
                          progressBar.setVisibility(View.GONE);
                          errorTxt.setText("");
 
-                         Toast.makeText(mContext,"commande créée",Toast.LENGTH_LONG).show();
-                         Log.d("cmd",cmd.toString());
+                         //Log.d("cmd",cmd.toString());
+                        int tmp = 0;
+                        for(String code: mCodes){
+                            detailsCommandeBL.setCodeProduit(Integer.parseInt(code));
+                            detailsCommandeBL.setQuantiteProd(mQtes.get(tmp));
+                            detailsCommandeBL.setIdCommandeBL(cmd.getIdCommandeBL());
+                            tmp++;
+                            //Log.d("detail",detailsCommandeBL.toString());
+                            detailsCommandeBLController.addDetailsCommandeBL(detailsCommandeBL,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+                                           // Log.d("detail","Posted");
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            progressBar.setVisibility(View.GONE);
+                                            errorTxt.setText(VolleyErrorHelper.getMessage(error));
+                                        }
+                                    });
+                        }
+                        Toast.makeText(mContext,"Commande créée",Toast.LENGTH_LONG).show();
+                        startActivity(i1);
 
-                         startActivity(i1);
+
+
                      }
                  }, new Response.ErrorListener() {
                      @Override
@@ -299,6 +329,8 @@ public class Commande extends AppCompatActivity implements DatePickerDialog.OnDa
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             mCodes.remove(viewHolder.getAdapterPosition());
+            mNames.remove(viewHolder.getAdapterPosition());
+            mQtes.remove(viewHolder.getAdapterPosition());
             adapter.notifyDataSetChanged();
             Toast.makeText(mContext,"Element supprimé",Toast.LENGTH_SHORT).show();
         }

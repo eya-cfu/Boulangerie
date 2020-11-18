@@ -80,6 +80,7 @@ public class RecylerViewAdapterCmd extends RecyclerView.Adapter<RecylerViewAdapt
 
         if(mCmdCodes.size()!=0){
 
+
             detailsStr = "";
 
             final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);

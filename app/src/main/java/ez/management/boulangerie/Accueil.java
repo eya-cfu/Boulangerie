@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -31,6 +32,7 @@ public class Accueil extends AppCompatActivity {
     Button historiqueBtn;
     Button enCoursBtn;
     Button disconnectBtn;
+    TextView profilTxt;
     Intent i1,i2,i3,i4;
     String file = "UserData";
     File cacheFile;
@@ -55,10 +57,13 @@ public class Accueil extends AppCompatActivity {
         historiqueBtn = findViewById(R.id.historiqueBtn);
         enCoursBtn = findViewById(R.id.enCoursBtn);
         disconnectBtn = findViewById(R.id.disconnectBtn);
+        profilTxt = findViewById(R.id.profilTxtView);
 
         cacheFile = new File(getCacheDir(), file);
         try {
             thisBoulangerie = thisBoulangerie.getUser(cacheFile);
+            profilTxt.setText("Vous etes BL"+ thisBoulangerie.getIdBoulangerie() + " "
+            + thisBoulangerie.getNomBL());
            // Log.d("cache boul", thisBoulangerie.toString());
         } catch (IOException | ClassNotFoundException e) {
             if(!cacheFile.exists()) {

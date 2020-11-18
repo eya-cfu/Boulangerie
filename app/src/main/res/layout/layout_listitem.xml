@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp"
+    android:padding="8dp"
     android:id="@+id/parent_layout">
 
     <TextView
@@ -16,7 +16,7 @@
         android:id="@+id/pdtCode"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/pdtNom"
         android:textColor="#000" />
 
@@ -24,7 +24,7 @@
         android:id="@+id/qte"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/pdtCode"
         android:textColor="#000" />
 </RelativeLayout>

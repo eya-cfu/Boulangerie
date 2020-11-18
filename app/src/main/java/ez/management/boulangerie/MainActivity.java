@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.bakerieslibrary.ApiException;
@@ -95,8 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Profils profil) {
                         if(profil != null){
                             responsable = profil;
-                            Log.d("Profils",responsable.toString());
-                            responsable.setMatricule(3333);
+                           // Log.d("Profils",responsable.toString());
 
                             boulangeriesController.getBoulangerieByMatricule(responsable.getMatricule(),
                                     new Response.Listener<Boulangeries>() {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                             progressBar.setVisibility(View.GONE);
                                             if(boulangerie != null){
                                                 thisBoulangerie = boulangerie;
-                                              //  Log.d("Boul",thisBoulangerie.toString());
+                                               // Log.d("Boul",thisBoulangerie.toString());
                                                 try {
                                                     thisBoulangerie.saveUser(cacheFile,thisBoulangerie);
                                                     startActivity(intent1);
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
                                             errorTxt.setText(VolleyErrorHelper.getMessage(error));
-                                            //Log.d("BL error", error.getMessage());
+                                            //Log.d("BL error", ""+error.getMessage());
                                         }
                                     });
                         }else{
@@ -134,8 +135,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressBar.setVisibility(View.GONE);
-                        errorTxt.setText(VolleyErrorHelper.getMessage(error));
-                       // Log.d("Profil error", error.getMessage());
+                        if((error instanceof NetworkError) || (error instanceof NoConnectionError)){
+                            errorTxt.setText("Vérifiez votre connexion Internet et réessayez");
+                        }else {
+                            errorTxt.setText("mauvais identifiants réessayer");
+                        }
+                        Log.d("Profil error", error.getMessage());
 
                     }
                 });
