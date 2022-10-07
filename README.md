@@ -1,5 +1,5 @@
 # Boulangerie
-L'application des boulangeries.
+Application mobile des boulangeries.
 
 Cette application mobile permet aux boulangeries de passer des commandes et les suivre.
 
